@@ -1,11 +1,10 @@
 ---
 title: "Lab 01 - Hello R"
-author: "Insert your name here"
-date: "Insert date here"
+author: "Kyle Knaut"
+date: "01/08/2023"
 output: 
   html_document: 
-    fig_height: 4
-    fig_width: 9
+    theme: yeti
 ---
 
 ## Load packages and data
@@ -19,16 +18,12 @@ library(datasauRus)
 
 ### Exercise 1
 
-Remove this text, and add your answer for Exercise 1 here.
+According to the help files, the datasaurus dozen is a collection of 12 datasets with the same mean, standard deviation, and Pearson correlation. The data collection itself has 1846 rows, and 3 variables. There is one variable that identifies which dataset the data belong to, one variable for x values, and one variable for y values.
 
 ### Exercise 2
 
-The answers for this exercise are given for you below.
-But you should clean up some of the narrative so that it only includes what you want to turn in.
 
-First let's plot the data in the dino dataset:
-
-```{r plot-dino, fig.height=3, fig.width=6}
+```{r plot-dino, fig.height=5, fig.width=7}
 dino_data <- datasaurus_dozen %>%
   filter(dataset == "dino")
 
@@ -36,51 +31,77 @@ ggplot(data = dino_data, mapping = aes(x = x, y = y)) +
   geom_point()
 ```
 
-And next calculate the correlation between `x` and `y` in this dataset:
+
+Which gave me a cool graph of a dinosaurial relationship
+
 
 ```{r cor-dino}
 dino_data %>%
   summarize(r = cor(x, y))
 ```
 
+This yielded an r value of -0.0645
+I was considering including my code to look at the bulls eye or another cool shape but I saw that this is the same as what I'm doing in the next exercises :))
+
 ### Exercise 3
 
-Add code and narrative as needed.
-Note that the R chunks are labeled with `plot-star` and `cor-star` to provide spaces to place the code for plotting and calculating the correlation coefficient.
-To finish, clean up the narrative by removing these instructions.
-
-
-
-```{r plot-star}
-
+``` {r}
+star_data <-  datasaurus_dozen %>%
+  filter(dataset == "star")
+ggplot (data = star_data, mapping = aes(x = x, y = y)) + geom_point()
 ```
 
-I'm some filler text, you should replace me with more meaningful text...
+This yielded a cool star, the data points were less evenly distributed than they were for the dinosaur. For my next exercise I may use a different geometry than points. We will see.
 
-```{r cor-star}
+*** at first I was having trouble knitting with the directions for my command script but I figured this out by removing these lines, however, I cannot figure out how to get the star plot to show up in my knitted file. I tried copying the language that was in between the funky brackets at the start of the dino section but replacing dino with star, but I think this confused r and its confusion confused me. 
 
+```{r}
+star_data %>%
+  summarize (r = cor(x, y))
 ```
+
+This plot had a very similar but slightly different correlation, with an r value of -0.0630
 
 ### Exercise 4
 
-Add code and narrative as needed.
-Note that two R chunks are given but they are not labeled.
-Use the convention from above to name them appropriately.
+The naming convention keeps quitting on my when I rename the chunk the same as it is on the dino exercise, but with the accurate shape. It keeps saying that it is quitting for unnamed chunks, or because it doesn't like the name I'm giving everything. I will need to talk to you during our next call about how to use markdown so that these plots show up because as of right now the naming conventions are confusing me a lot. 
 
 ```{r}
-
+circle_data <- datasaurus_dozen %>%
+  filter(dataset == "circle")
+ggplot (data = circle_data, mapping = aes(x = x, y = y)) + geom_point()
 ```
+
+This exercise gave me a circle as expected with three points that don't quite match up with the shape. I tried to experiment with using different geometries than points, and I randomly picked GeomContourFilled and GeomAbline, but neither of these worked and I got an error saying I can't add this geometry to ggplot so I don't know what's up with that. I also think that I've figured out why my knit document didn't include the actual output from r, as I was copying and pasting from the console into the source and I had included >. I have since removed these from one section of the star exercise and I was more deliberate to copy my code line by line for the circle. We'll see if I've actually figured it out when I knit but for now I'll calculate the correlation then try. 
+
+**edit: I totally did it I'm so cool. 
 
 ```{r}
-
+circle_data %>%
+  summarize (r = cor(x, y))
 ```
+
+This calculation yielded a correlation of -0.0683, which is the highest absolute value of any correlation thus far. About to knit and wishing myself luck.
 
 ### Exercise 5
 
 Add code and narrative as needed.
 
 To add R chunks either type out the backticks, curly braces, and the letter `r` or use the Insert chunk button above, green C+.
+```{r}
+ggplot(datasaurus_dozen, aes(x = x, y = y, color = dataset)) + geom_point() + facet_wrap(~ dataset, ncol = 3) + theme(legend.position = "none")
+```
 
+This yeilded 13 graphs, one for each dataset
 
+```{r}
+datasaurus_dozen %>%
+  group_by(dataset) %>%
+  summarize(r = cor(x, y)) %>%
+  print(13)
+```
+It didn't show me the correlations in the command line but I will see if it does work when I knit.
+
+Okay so that didn't work, I don't know why it won't show the correlations because all of my code is correct. I may need more help but for now I feel pretty good about this assignment. I will add it to my github and submit once I've done the last steps. I have been commiting my changes and it says I'm several commits ahead of the main branch which is annoying. I think I've mentioned it in this file but I am trying to commit and push my changes in command line because gitkraken is being really silly and it is not letting me do so by manually entering my password, instead, the link it sends me to says I need a personal access token. Might be important to update the lab to reflect this and have a portion dedicated to getting one of those instead of the paragraph saying it’s important to enter the password after every commit. Either that or it's user error ://
 
 
